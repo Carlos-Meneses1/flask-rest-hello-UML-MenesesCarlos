@@ -46,7 +46,7 @@ Debes migrar y actualizar las migraciones por cada actualización que hagas a tu
 
 ```bash
 $ pipenv run migrate # (para hacer las migraciones)
-$ pipenv run upgrade  # (para actualizar tu base de datos con las migraciones)
+$  pipenv run upgrade # (para actualizar tu base de datos con las migraciones)
 ```
 
 ## Generar un diagrama de la base de datos
