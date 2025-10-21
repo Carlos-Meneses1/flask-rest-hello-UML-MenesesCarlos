@@ -5,13 +5,17 @@ from typing import List
 
 db = SQLAlchemy()
 
+class AlembicVersion(db.Model):
+    __tablename__ = 'alembic_version'
+    version_num: Mapped[str] = mapped_column(db.String(32),primary_key=True)
+
 class User(db.Model):
     __tablename__ = 'user'
     id: Mapped[int] = mapped_column(primary_key=True)
-    email: Mapped[str] = mapped_column(nullable=False)
-    firstname: Mapped[str] = mapped_column(nullable=False)
-    lastname: Mapped[str] = mapped_column(nullable=False)
-    username: Mapped[str] = mapped_column(nullable=False)
+    email: Mapped[str] = mapped_column(db.String(120),nullable=False)
+    firstname: Mapped[str] = mapped_column(db.String(120),nullable=False)
+    lastname: Mapped[str] = mapped_column(db.String(120),nullable=False)
+    username: Mapped[str] = mapped_column(db.String(120),nullable=False)
     
     posts: Mapped[List["Post"]] = relationship(back_populates="user")
     comments: Mapped[List["Comment"]] = relationship(back_populates="author")
@@ -25,10 +29,6 @@ class User(db.Model):
             "lastname": self.lastname,
         }
 
-class AlembicVersion(db.Model):
-    __tablename__ = 'alembic_version'
-    version_num: Mapped[str] = mapped_column(primary_key=True)
-    
 class Post(db.Model):
     __tablename__ = 'post'
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -47,8 +47,8 @@ class Post(db.Model):
 class Media(db.Model):
     __tablename__ = 'media'
     id: Mapped[int] = mapped_column(primary_key=True)
-    type: Mapped[str] = mapped_column(nullable=False)
-    url: Mapped[str] = mapped_column(nullable=False)
+    type: Mapped[int] = mapped_column(nullable=False)
+    url: Mapped[str] = mapped_column(db.String(500),nullable=False)
     post_id: Mapped[int] = mapped_column(db.ForeignKey("post.id"), nullable=False)
     
     post: Mapped["Post"] = relationship(back_populates="media")
@@ -65,7 +65,7 @@ class Comment(db.Model):
     __tablename__ = 'comment'
     id: Mapped[int] = mapped_column(primary_key=True)
     author_id: Mapped[int] = mapped_column(db.ForeignKey("user.id"), nullable=False)
-    comment_text: Mapped[str] = mapped_column(nullable=False)
+    comment_text: Mapped[str] = mapped_column(db.String(1000),nullable=False)
     post_id: Mapped[int] = mapped_column(db.ForeignKey("post.id"), nullable=False)
     
     author: Mapped["User"] = relationship(back_populates="comments")
